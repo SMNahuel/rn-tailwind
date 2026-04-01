@@ -1,32 +1,41 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useMemo, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "@/navigation/types";
 
 import Card from "@/components/ui/primitive/card";
 import {
   DividerWithLabel,
   OutlineIconButton,
-  PrimaryButton,
   UnderlinedInput,
+} from "@/components/ui";
+
+import {
+  LeanView as View,
+  LeanText as Text,
+  PrimaryButton as Button,
 } from "@/components/ui";
 import { colors } from "@/theme/colors";
 
 const GRADIENT_COLORS = ["rgba(0, 230, 118, 0.16)", "transparent"] as const;
 
+type AuthNavigation = NativeStackNavigationProp<RootStackParamList, "Auth">;
+
 export default function AuthScreen() {
+  const { t } = useTranslation("auth");
+  const navigation = useNavigation<AuthNavigation>();
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onAuthenticate = useCallback(() => {}, []);
+  const onAuthenticate = useCallback(() => {
+    navigation.replace("Main");
+  }, [navigation]);
   const onGoogle = useCallback(() => {}, []);
   const onApple = useCallback(() => {}, []);
   const onForgot = useCallback(() => {}, []);
@@ -74,11 +83,11 @@ export default function AuthScreen() {
     () => (
       <Pressable accessibilityRole="button" hitSlop={12} onPress={onForgot}>
         <Text className="text-label-xs font-semibold uppercase tracking-widest text-primary">
-          Forgot?
+          {t("form.forgot")}
         </Text>
       </Pressable>
     ),
-    [onForgot],
+    [onForgot, t],
   );
 
   return (
@@ -100,76 +109,69 @@ export default function AuthScreen() {
           }}
         >
           <Text className="py-6 text-center text-4xl font-bold tracking-tight text-primary">
-            EF
+            {t("logo")}
           </Text>
-
-          <Card className="flex-1 justify-between bg-card p-6">
+          <Card className="flex-1 gap-10 bg-card p-6">
             {/* Header */}
-            <View className="items-center gap-2">
+            <View className="items-center gap-2 justify-between ">
               <Text className="text-center text-headline font-bold text-foreground">
-                Welcome Back
+                {t("title")}
               </Text>
               <Text className="text-center text-body text-muted">
-                Access your secure financial dashboard.
+                {t("subtitle")}
               </Text>
             </View>
 
             {/* Form */}
-            <View className="gap-6">
+            <View className="justify-between flex-1">
               <UnderlinedInput
                 autoCapitalize="none"
                 keyboardType="email-address"
-                label="Digital Identity"
+                label={t("form.emailLabel")}
                 leftIcon={emailIcon}
                 onChangeText={setEmail}
-                placeholder="name@domain.com"
+                placeholder={t("form.emailPlaceholder")}
                 returnKeyType="next"
                 value={email}
               />
               <UnderlinedInput
-                label="Security Token"
+                label={t("form.passwordLabel")}
                 labelRightAccessory={forgotAccessory}
                 leftIcon={keyIcon}
                 onChangeText={setPassword}
                 onSubmitEditing={onAuthenticate}
-                placeholder="••••••••••••"
+                placeholder={t("form.passwordPlaceholder")}
                 returnKeyType="done"
                 secureTextEntry
                 value={password}
               />
-            </View>
-
-            {/* Actions */}
-            <View className="gap-4">
-              <PrimaryButton onPress={onAuthenticate}>
-                Authenticate
-              </PrimaryButton>
-              <DividerWithLabel label="Or connect with" />
+              <Button variant="primary" onPress={onAuthenticate}>
+                {t("actions.authenticate")}
+              </Button>
+              <DividerWithLabel label={t("actions.divider")} />
               <View className="flex-row gap-3">
                 <OutlineIconButton
                   icon={googleIcon}
-                  label="Google"
+                  label={t("actions.google")}
                   onPress={onGoogle}
                 />
                 <OutlineIconButton
                   icon={appleIcon}
-                  label="Apple"
+                  label={t("actions.apple")}
                   onPress={onApple}
                 />
               </View>
-            </View>
-
-            {/* Footer */}
-            <Text className="text-center text-body text-muted-foreground">
-              New to the future?{" "}
-              <Text
-                accessibilityRole="link"
-                className="font-semibold text-primary"
-                onPress={onCreateAccount}
-              >
-                Create Account
+              <Text className="text-center text-body text-muted-foreground">
+                {t("footer.newUser")}{" "}
+                <Text
+                  accessibilityRole="link"
+                  className="font-semibold text-primary"
+                  onPress={onCreateAccount}
+                >
+                  {t("footer.createAccount")}
+                </Text>
               </Text>
-            </Text>
+            </View>
           </Card>
         </View>
       </KeyboardAvoidingView>
