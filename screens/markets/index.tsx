@@ -1,17 +1,12 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { memo, useCallback, useMemo, useState } from "react";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { colors } from "@/theme/colors";
 import { cn } from "@/lib/utils";
+import useList from "@/api/crypto/useList";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -129,22 +124,9 @@ export default function MarketsScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<Filter>("gainers");
   const [activeTab, setActiveTab] = useState<AssetTab>("stocks");
-  const [timeLeft, setTimeLeft] = useState(MARKET_CLOSE_SECONDS);
 
-  useEffect(() => {
-    const timer = setInterval(
-      () => setTimeLeft((prev) => Math.max(0, prev - 1)),
-      1000,
-    );
-    return () => clearInterval(timer);
-  }, []);
-
-  const formattedTime = useMemo(() => {
-    const h = Math.floor(timeLeft / 3600);
-    const m = Math.floor((timeLeft % 3600) / 60);
-    const s = timeLeft % 60;
-    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  }, [timeLeft]);
+  const { data: cryptoList, isLoading } = useList();
+  console.log("cryptoList", cryptoList);
 
   const onFilterPress = useCallback((key: Filter) => setActiveFilter(key), []);
   const onTabPress = useCallback((key: AssetTab) => setActiveTab(key), []);
@@ -334,22 +316,6 @@ export default function MarketsScreen() {
           <Text className="text-4xl font-bold text-foreground">14.22</Text>
           <Text className="mt-1 text-body text-muted">
             {t("volatility.description")}
-          </Text>
-        </View>
-
-        {/* ── Market status card ── */}
-        <View className="mx-6 mb-6 rounded-2xl bg-card p-4">
-          <Text className="mb-2 text-label-xs uppercase tracking-widest text-muted">
-            {t("status.label")}
-          </Text>
-          <View className="flex-row items-center gap-2">
-            <View className="h-2.5 w-2.5 rounded-full bg-primary" />
-            <Text className="text-body font-semibold text-foreground">
-              {t("status.open")}
-            </Text>
-          </View>
-          <Text className="mt-1 text-label text-muted">
-            {t("status.endsIn")} {formattedTime}
           </Text>
         </View>
 

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { ComponentProps } from "react";
 
 import MarketsScreen from "@/screens/markets";
+import ProfileScreen from "@/screens/profile";
 import PlaceholderScreen from "@/screens/placeholder";
 import { colors } from "@/theme/colors";
 import type { MainTabParamList } from "./types";
@@ -67,7 +68,7 @@ export default function MainNavigator() {
         }}
       />
       <Tab.Screen
-        component={PlaceholderScreen}
+        component={ProfileScreen}
         name="Profile"
         options={{
           tabBarLabel: "PROFILE",
