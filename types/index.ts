@@ -1,5 +1,6 @@
 export type AssetType = 'stock' | 'crypto' | 'forex';
 export type ThemeType = 'dark' | 'light';
+export type AssetFilterType = 'topGainers' | 'topLosers' | 'topFavorites';
 
 export interface Asset {
   id: string;

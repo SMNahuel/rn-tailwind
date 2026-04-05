@@ -5,126 +5,56 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { colors } from "@/theme/colors";
-import { cn } from "@/lib/utils";
 import { market$ } from "@/store/asset/asset";
 
 import SearchBar from "@/components/ui/markets/search-bar";
 import RowItem from "@/components/ui/markets/row-item";
 import Hero from "@/components/ui/markets/hero";
+import AssetTypeTabs from "@/components/ui/markets/asset-type-tabs";
+import { AssetType, AssetFilterType } from "@/types";
+import AssetFiltersTabs from "@/components/ui/markets/asset-filters-tabs";
 
 //import useList from "@/api/crypto/useList";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type Filter = "gainers" | "losers" | "favorites";
-type AssetTab = "stocks" | "crypto" | "forex";
-
-// ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function MarketsScreen() {
   const { t } = useTranslation("markets");
   const { top } = useSafeAreaInsets();
   const assets = market$.assets.get();
 
-  const [activeFilter, setActiveFilter] = useState<Filter>("gainers");
-  const [activeTab, setActiveTab] = useState<AssetTab>("stocks");
+  const [activeFilter, setActiveFilter] =
+    useState<AssetFilterType>("topGainers");
+  const [activeTab, setActiveTab] = useState<AssetType>("stock");
 
   /*   const { data: cryptoList, isLoading } = useList(); */
 
-  const onFilterPress = useCallback((key: Filter) => setActiveFilter(key), []);
-  const onTabPress = useCallback((key: AssetTab) => setActiveTab(key), []);
+  const onFilterPress = useCallback(
+    (key: AssetFilterType) => setActiveFilter(key),
+    [],
+  );
+  const onTabPress = useCallback((key: AssetType) => setActiveTab(key), []);
 
-  const filters: { key: Filter; label: string }[] = [
-    { key: "gainers", label: t("filters.topGainers") },
-    { key: "losers", label: t("filters.losers") },
-    { key: "favorites", label: `★  ${t("filters.favorites")}` },
-  ];
-
-  const tabs: { key: AssetTab; label: string }[] = [
-    { key: "stocks", label: t("tabs.stocks") },
-    { key: "crypto", label: t("tabs.crypto") },
-    { key: "forex", label: t("tabs.forex") },
+  const filters: { key: AssetFilterType; label: string }[] = [
+    { key: "topGainers", label: t("filters.topGainers") },
+    { key: "topLosers", label: t("filters.losers") },
+    { key: "topFavorites", label: `★  ${t("filters.favorites")}` },
   ];
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: top }}>
-      {/* ── Header ── */}
-
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
       >
         <Hero />
-
         <SearchBar />
+        <AssetFiltersTabs
+          filters={filters}
+          activeFilter={activeFilter}
+          onFilterPress={onFilterPress}
+        />
 
-        <ScrollView
-          horizontal
-          className="mb-5"
-          contentContainerStyle={{ paddingHorizontal: 24 }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {filters.map(({ key, label }, idx) => {
-            const isActive = activeFilter === key;
-            return (
-              <Pressable
-                key={key}
-                accessibilityRole="button"
-                onPress={() => onFilterPress(key)}
-                style={{ marginRight: idx < filters.length - 1 ? 8 : 0 }}
-                className={cn(
-                  "rounded-full px-4 py-2",
-                  isActive
-                    ? "bg-primary"
-                    : "border border-border bg-transparent",
-                )}
-              >
-                <Text
-                  className={cn(
-                    "text-label font-medium",
-                    isActive ? "text-primary-foreground" : "text-foreground",
-                  )}
-                >
-                  {label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-
-        {/* ── Asset type tabs ── */}
-        <View className="mb-4 flex-row border-b border-border px-6">
-          {tabs.map(({ key, label }) => {
-            const isActive = activeTab === key;
-            return (
-              <Pressable
-                key={key}
-                accessibilityRole="tab"
-                onPress={() => onTabPress(key)}
-                className="mr-6 pb-3"
-                style={
-                  isActive
-                    ? {
-                        borderBottomWidth: 2,
-                        borderBottomColor: colors.primary.DEFAULT,
-                      }
-                    : undefined
-                }
-              >
-                <Text
-                  className={cn(
-                    "text-body font-medium",
-                    isActive ? "text-foreground" : "text-muted",
-                  )}
-                >
-                  {label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
+        <AssetTypeTabs onTabPress={onTabPress} activeTab={activeTab} />
         {/* ── Featured asset card (Apple) ── */}
         <View className="mx-6 mb-4 rounded-2xl bg-card p-4">
           <View className="flex-row items-center justify-between">
