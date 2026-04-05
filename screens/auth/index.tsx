@@ -4,9 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { KeyboardAvoidingView, Platform, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "@/navigation/types";
+import { useRouter } from "expo-router";
 
 import Card from "@/components/ui/primitive/card";
 import {
@@ -24,18 +22,16 @@ import { colors } from "@/theme/colors";
 
 const GRADIENT_COLORS = ["rgba(0, 230, 118, 0.16)", "transparent"] as const;
 
-type AuthNavigation = NativeStackNavigationProp<RootStackParamList, "Auth">;
-
 export default function AuthScreen() {
   const { t } = useTranslation("auth");
-  const navigation = useNavigation<AuthNavigation>();
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onAuthenticate = useCallback(() => {
-    navigation.replace("Main");
-  }, [navigation]);
+    router.replace("/(tabs)/markets");
+  }, [router]);
   const onGoogle = useCallback(() => {}, []);
   const onApple = useCallback(() => {}, []);
   const onForgot = useCallback(() => {}, []);

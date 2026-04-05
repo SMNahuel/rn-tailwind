@@ -7,7 +7,7 @@ const nativewind = require("nativewind/preset");
 
 const config = {
   content: [
-    "./App.{js,ts,tsx}",
+    "./app/**/*.{js,ts,tsx}",
     "./components/**/*.{js,ts,tsx}",
     "./screens/**/*.{js,ts,tsx}",
   ],

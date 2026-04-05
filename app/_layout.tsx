@@ -1,49 +1,44 @@
+import "@/i18n";
+
 import SplashScreen from "@/components/SplashScreen";
 import Providers from "@/providers";
 import { onAppStartup } from "@/utils/startup.utils";
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import "./global.css";
-import { useAuth } from "@/hooks/useAuth";
-export default function RootLayout() {
-  const { isAuthenticated } = useAuth();
 
+import "./global.css";
+
+export default function RootLayout() {
   const [load, setLoad] = useState(true);
 
   useEffect(() => {
     async function prepare() {
       await onAppStartup();
     }
-
-    const timer = () => {
-      setTimeout(() => {
-        setLoad(false);
-      }, 7000);
-    };
-    prepare();
-    timer();
+    void prepare();
+    const id = setTimeout(() => setLoad(false), 7000);
+    return () => clearTimeout(id);
   }, []);
 
   if (load) {
-    // Async font loading only occurs in development.
     return <SplashScreen />;
   }
-  console.log(isAuthenticated)
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Providers>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="camera" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-          <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
+    <Providers>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(unauth)" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="camera" />
+          <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
-      </Providers>
-    </ThemeProvider>
+      </GestureHandlerRootView>
+    </Providers>
   );
 }

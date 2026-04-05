@@ -1,16 +1,10 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Tabs } from "expo-router";
 import type { ComponentProps } from "react";
 
-import MarketsScreen from "@/screens/markets";
-import ProfileScreen from "@/screens/profile";
-import PlaceholderScreen from "@/screens/placeholder";
 import { colors } from "@/theme/colors";
-import type { MainTabParamList } from "./types";
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
-
-const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const makeIcon =
   (name: IconName) =>
@@ -18,10 +12,10 @@ const makeIcon =
     <MaterialCommunityIcons color={color} name={name} size={size} />
   );
 
-export default function MainNavigator() {
+export default function TabLayout() {
   return (
-    <Tab.Navigator
-      initialRouteName="Markets"
+    <Tabs
+      initialRouteName="markets"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -38,43 +32,46 @@ export default function MainNavigator() {
         },
       }}
     >
-      <Tab.Screen
-        component={PlaceholderScreen}
-        name="Home"
-        options={{ tabBarLabel: "HOME", tabBarIcon: makeIcon("home-outline") }}
-      />
-      <Tab.Screen
-        component={MarketsScreen}
-        name="Markets"
+      <Tabs.Screen
+        name="index"
         options={{
+          title: "HOME",
+          tabBarLabel: "HOME",
+          tabBarIcon: makeIcon("home-outline"),
+        }}
+      />
+      <Tabs.Screen
+        name="markets"
+        options={{
+          title: "MARKETS",
           tabBarLabel: "MARKETS",
           tabBarIcon: makeIcon("chart-areaspline"),
         }}
       />
-      <Tab.Screen
-        component={PlaceholderScreen}
-        name="Trade"
+      <Tabs.Screen
+        name="trade"
         options={{
+          title: "TRADE",
           tabBarLabel: "TRADE",
           tabBarIcon: makeIcon("swap-horizontal"),
         }}
       />
-      <Tab.Screen
-        component={PlaceholderScreen}
-        name="Wallet"
+      <Tabs.Screen
+        name="wallet"
         options={{
+          title: "WALLET",
           tabBarLabel: "WALLET",
           tabBarIcon: makeIcon("wallet-outline"),
         }}
       />
-      <Tab.Screen
-        component={ProfileScreen}
-        name="Profile"
+      <Tabs.Screen
+        name="profile"
         options={{
+          title: "PROFILE",
           tabBarLabel: "PROFILE",
           tabBarIcon: makeIcon("account-outline"),
         }}
       />
-    </Tab.Navigator>
+    </Tabs>
   );
 }
