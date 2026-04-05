@@ -1,6 +1,7 @@
 import { memo, type ReactNode } from "react";
-import { Pressable, Text, View, type PressableProps } from "react-native";
-
+import { Pressable, type PressableProps } from "react-native";
+import { LeanView as View } from "@/components/ui/primitive/lean-view";
+import { LeanText as Text } from "@/components/ui/primitive/lean-text";
 import { cn } from "@/lib/utils";
 
 export type OutlineIconButtonProps = {

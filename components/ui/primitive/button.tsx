@@ -4,9 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
-  View,
 } from "react-native";
-
+import { LeanView as View } from "@/components/ui/primitive/lean-view";
 import { type VariantProps, cva } from "class-variance-authority";
 
 import { colors } from "@/theme/colors";
@@ -27,7 +26,7 @@ const labelVariants = cva(
         link: "",
         disabled: "text-grey-300",
         apple: "text-white",
-        primary: "text-black"
+        primary: "text-black",
       },
       size: {
         default: "",
@@ -41,7 +40,7 @@ const labelVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 const buttonVariants = cva(
   "flex flex-row gap-3 justify-center items-center rounded-lg py-3 max-h-14 px-4",
@@ -70,12 +69,11 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
-  extends TouchableOpacityProps,
-    VariantProps<typeof buttonVariants> {
+  extends TouchableOpacityProps, VariantProps<typeof buttonVariants> {
   labelClassName?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -86,14 +84,14 @@ export interface ButtonProps
 const Button = React.forwardRef<typeof TouchableOpacity, ButtonProps>(
   (
     { className, loading, labelClassName, size, disabled, onPress, ...props },
-    ref
+    ref,
   ) => {
     const variant = disabled ? "disabled" : props.variant || "default";
     const getClassNames = useCallback(
       (className: string | undefined) => {
         return cn(buttonVariants({ variant, size, className }));
       },
-      [variant, size, className, props.leftIcon, props.rightIcon]
+      [variant, size, className, props.leftIcon, props.rightIcon],
     );
     const getLabelClassNames = useCallback(
       (className: string | undefined) => {
@@ -107,12 +105,12 @@ const Button = React.forwardRef<typeof TouchableOpacity, ButtonProps>(
             className: cn(
               flexClassname,
               className,
-              disabled && "text-grey-300"
+              disabled && "text-grey-300",
             ),
-          })
+          }),
         );
       },
-      [variant, size, labelClassName, props.leftIcon, props.rightIcon]
+      [variant, size, labelClassName, props.leftIcon, props.rightIcon],
     );
 
     const getLoadingColor = useCallback(() => {
@@ -150,7 +148,7 @@ const Button = React.forwardRef<typeof TouchableOpacity, ButtonProps>(
         )}
       </TouchableOpacity>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({

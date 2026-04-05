@@ -1,132 +1,35 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { memo, useCallback, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { useCallback, useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { colors } from "@/theme/colors";
 import { cn } from "@/lib/utils";
-import useList from "@/api/crypto/useList";
+import { market$ } from "@/store/asset/asset";
+
+import SearchBar from "@/components/ui/markets/search-bar";
+import RowItem from "@/components/ui/markets/row-item";
+import Hero from "@/components/ui/markets/hero";
+
+//import useList from "@/api/crypto/useList";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Filter = "gainers" | "losers" | "favorites";
 type AssetTab = "stocks" | "crypto" | "forex";
 
-type TrendingAsset = {
-  id: string;
-  initials: string;
-  name: string;
-  ticker: string;
-  price: string;
-  change: string;
-  positive: boolean;
-};
-
-// ─── Static data ──────────────────────────────────────────────────────────────
-
-const TRENDING_DATA: TrendingAsset[] = [
-  {
-    id: "1",
-    initials: "NV",
-    name: "NVIDIA Corp.",
-    ticker: "NVDA.NAS",
-    price: "$903.66",
-    change: "+3.12%",
-    positive: true,
-  },
-  {
-    id: "2",
-    initials: "TS",
-    name: "Tesla Motors",
-    ticker: "TSLA.NAS",
-    price: "$164.22",
-    change: "-1.84%",
-    positive: false,
-  },
-  {
-    id: "3",
-    initials: "MS",
-    name: "Microsoft",
-    ticker: "MSFT.NAS",
-    price: "$421.90",
-    change: "+0.67%",
-    positive: true,
-  },
-  {
-    id: "4",
-    initials: "AM",
-    name: "Amazon.com",
-    ticker: "AMZN.NAS",
-    price: "$178.15",
-    change: "+1.22%",
-    positive: true,
-  },
-];
-
-const MARKET_CLOSE_SECONDS = 5 * 3600 + 42 * 60 + 10;
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-const TrendingRow = memo(function TrendingRow({
-  item,
-  isLast,
-}: {
-  item: TrendingAsset;
-  isLast: boolean;
-}) {
-  return (
-    <View
-      className={cn(
-        "flex-row items-center justify-between py-3",
-        !isLast && "border-b border-border",
-      )}
-    >
-      <View className="flex-row items-center gap-3">
-        <View
-          className="h-10 w-10 items-center justify-center rounded-xl"
-          style={{ backgroundColor: colors.neutral[800] }}
-        >
-          <Text className="text-label-xs font-bold text-foreground">
-            {item.initials}
-          </Text>
-        </View>
-        <View>
-          <Text className="text-body font-semibold text-foreground">
-            {item.name}
-          </Text>
-          <Text className="text-label-xs text-muted">{item.ticker}</Text>
-        </View>
-      </View>
-      <View className="items-end">
-        <Text className="text-body font-semibold text-foreground">
-          {item.price}
-        </Text>
-        <Text
-          className={cn(
-            "text-label-xs font-medium",
-            item.positive ? "text-primary" : "text-destructive",
-          )}
-        >
-          {item.change}
-        </Text>
-      </View>
-    </View>
-  );
-});
-
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function MarketsScreen() {
   const { t } = useTranslation("markets");
   const { top } = useSafeAreaInsets();
+  const assets = market$.assets.get();
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<Filter>("gainers");
   const [activeTab, setActiveTab] = useState<AssetTab>("stocks");
 
-  const { data: cryptoList, isLoading } = useList();
-  console.log("cryptoList", cryptoList);
+  /*   const { data: cryptoList, isLoading } = useList(); */
 
   const onFilterPress = useCallback((key: Filter) => setActiveFilter(key), []);
   const onTabPress = useCallback((key: AssetTab) => setActiveTab(key), []);
@@ -146,63 +49,16 @@ export default function MarketsScreen() {
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: top }}>
       {/* ── Header ── */}
-      <View className="flex-row items-center justify-between px-6 py-4">
-        <View className="h-9 w-9 items-center justify-center rounded-full border border-border">
-          <MaterialCommunityIcons
-            color={colors.muted}
-            name="account-outline"
-            size={20}
-          />
-        </View>
-        <Text className="text-base font-bold text-foreground">
-          {t("header.title")}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          className="h-9 w-9 items-center justify-center"
-        >
-          <MaterialCommunityIcons
-            color={colors.primary.DEFAULT}
-            name="magnify"
-            size={24}
-          />
-        </Pressable>
-      </View>
 
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* ── Hero ── */}
-        <View className="px-6 pb-5">
-          <Text className="text-4xl font-bold leading-tight text-foreground">
-            {t("hero.heading")}
-            {"\n"}
-            <Text className="text-primary">{t("hero.headingAccent")}</Text>
-          </Text>
-          <Text className="mt-3 text-body leading-5 text-muted">
-            {t("hero.subtitle")}
-          </Text>
-        </View>
+        <Hero />
 
-        {/* ── Search bar ── */}
-        <View className="mx-6 mb-4 flex-row items-center gap-3 rounded-xl border border-border bg-input px-4">
-          <MaterialCommunityIcons
-            color={colors["muted-foreground"]}
-            name="magnify"
-            size={18}
-          />
-          <TextInput
-            className="flex-1 py-3 text-body text-foreground"
-            placeholder={t("searchPlaceholder")}
-            placeholderTextColor={colors["muted-foreground"]}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+        <SearchBar />
 
-        {/* ── Filter chips ── */}
         <ScrollView
           horizontal
           className="mb-5"
@@ -331,12 +187,8 @@ export default function MarketsScreen() {
               </Text>
             </Pressable>
           </View>
-          {TRENDING_DATA.map((item, index) => (
-            <TrendingRow
-              key={item.id}
-              isLast={index === TRENDING_DATA.length - 1}
-              item={item}
-            />
+          {assets.map((item, index) => (
+            <RowItem key={item.id} item={item} />
           ))}
         </View>
       </ScrollView>

@@ -1,6 +1,7 @@
 import { forwardRef, memo, type ReactNode } from "react";
-import { Text, TextInput, View, type TextInputProps } from "react-native";
-
+import { TextInput, type TextInputProps } from "react-native";
+import { LeanView as View } from "@/components/ui/primitive/lean-view";
+import { LeanText as Text } from "@/components/ui/primitive/lean-text";
 import { cn } from "@/lib/utils";
 
 export type UnderlinedInputProps = {

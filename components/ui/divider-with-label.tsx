@@ -1,5 +1,6 @@
 import { memo } from "react";
-import { Text, View } from "react-native";
+import { LeanView as View } from "@/components/ui/primitive/lean-view";
+import { LeanText as Text } from "@/components/ui/primitive/lean-text";
 
 import { cn } from "@/lib/utils";
 

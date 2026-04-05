@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { View } from "react-native";
+import { LeanView as View } from "@/components/ui/primitive/lean-view";
 
 const Card = ({
   children,
