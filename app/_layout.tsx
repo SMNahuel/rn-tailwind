@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
 import "./global.css";
+import { colors } from "@/theme/colors";
 
 export default function RootLayout() {
   const [load, setLoad] = useState(true);
@@ -29,15 +30,14 @@ export default function RootLayout() {
 
   return (
     <Providers>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
           <Stack.Screen name="(unauth)" />
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="camera" />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style="auto" backgroundColor={colors.background} />
       </GestureHandlerRootView>
     </Providers>
   );

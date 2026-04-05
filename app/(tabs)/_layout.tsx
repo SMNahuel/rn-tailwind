@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import type { ComponentProps } from "react";
 
 import { colors } from "@/theme/colors";
@@ -13,12 +13,16 @@ const makeIcon =
   );
 
 export default function TabLayout() {
+  const pathname = usePathname();
+  const hideTabBar = /\/markets\/[^/]+/.test(pathname);
+
   return (
     <Tabs
       initialRouteName="markets"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          display: hideTabBar ? "none" : "flex",
           backgroundColor: colors.card,
           borderTopColor: colors.border,
           borderTopWidth: 1,
@@ -46,22 +50,6 @@ export default function TabLayout() {
           title: "MARKETS",
           tabBarLabel: "MARKETS",
           tabBarIcon: makeIcon("chart-areaspline"),
-        }}
-      />
-      <Tabs.Screen
-        name="trade"
-        options={{
-          title: "TRADE",
-          tabBarLabel: "TRADE",
-          tabBarIcon: makeIcon("swap-horizontal"),
-        }}
-      />
-      <Tabs.Screen
-        name="wallet"
-        options={{
-          title: "WALLET",
-          tabBarLabel: "WALLET",
-          tabBarIcon: makeIcon("wallet-outline"),
         }}
       />
       <Tabs.Screen

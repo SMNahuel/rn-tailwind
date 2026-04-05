@@ -18,7 +18,7 @@ export default function Header() {
         />
       </View>
       <Text className="text-base font-bold text-foreground">
-        {t("header.title")}
+        
       </Text>
       <Pressable
         accessibilityRole="button"

@@ -24,6 +24,62 @@ export default {
       endsIn: "Cierra en:",
     },
     trending: { title: "Activos Tendencia", viewAll: "VER TODO" },
+    assetDetail: {
+      notFound: "No encontramos este activo.",
+      backToMarkets: "Volver a mercados",
+      volume24h: "Volumen (24h)",
+      high24h: "Máximo (24h)",
+      marketInsights: "Panorama del mercado",
+      technicalTitle: "Sentimiento técnico",
+      rsiLabel: "Fuerza relativa (RSI)",
+      sentimentBody:
+        "El momentum en torno a {{name}} sugiere un tono constructivo. Vigilá agotamiento si el precio se aleja demasiado de los promedios de corto plazo.",
+      ranges: {
+        "1D": "1D",
+        "1W": "1S",
+        "1M": "1M",
+        "1Y": "1A",
+        ALL: "TODO",
+      },
+      rsi: {
+        strong: "Fuerte",
+        neutral: "Neutro",
+        weak: "Débil",
+      },
+      statsLabels: {
+        marketCap: "Capitalización",
+        circulating: "Suministro circulante",
+        ath: "Máximo histórico",
+        rank: "Ranking",
+        volumeAvg: "Volumen prom.",
+        week52High: "Máx. 52 sem.",
+        pe: "Ratio P/E",
+        sessionHigh: "Máx. de sesión",
+        sessionLow: "Mín. de sesión",
+        yearHigh: "Máx. 52 sem.",
+        yearLow: "Mín. 52 sem.",
+      },
+      insights: {
+        one: {
+          category: "Adopción institucional",
+          headline:
+            "Un gran banco europeo lanza custodia de activos digitales para clientes seleccionados.",
+          time: "hace 2h",
+        },
+        two: {
+          category: "Flujos on-chain",
+          headline:
+            "Billeteras whale muestran acumulación neta por tercera semana seguida.",
+          time: "hace 5h",
+        },
+        three: {
+          category: "Macro",
+          headline:
+            "Un CPI más suave refuerza el tono risk-on en crecimiento y cripto.",
+          time: "hace 1d",
+        },
+      },
+    },
   },
   auth: {
     logo: "EF",
