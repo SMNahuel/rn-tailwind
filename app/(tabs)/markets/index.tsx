@@ -10,11 +10,16 @@ import RowItem from "@/components/ui/markets/row-item";
 import Hero from "@/components/ui/markets/hero";
 import AssetTypeTabs from "@/components/ui/markets/asset-type-tabs";
 import { AssetType } from "@/types";
+import useListStock from "@/api/stock/useList";
+import useListCrypto from "@/api/crypto/useList";
 
 export default function MarketsScreen() {
   const { t } = useTranslation("markets");
   const { top } = useSafeAreaInsets();
   const assets = market$.assets.get();
+
+  const { data: cryptoData } = useListCrypto();
+  console.log(JSON.stringify(cryptoData.data.slice(0, 10), null, 2));
 
   const [activeTab, setActiveTab] = useState<AssetType>("stock");
 

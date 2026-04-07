@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import useListQuery from "./useList.query";
 
-const useListCrypto = () => {
+const useListStock = () => {
   return useQuery({
-    queryKey: ["crypto"],
+    queryKey: ["stock"],
     queryFn: () => useListQuery(),
-    select: (data) => data,
-
   });
 };
 
-export default useListCrypto;
+export default useListStock;
